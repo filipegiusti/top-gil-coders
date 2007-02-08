@@ -9,6 +9,7 @@ Acaba: 06/03
 
 
 Tarefas 1ª semana:
+* Instalar um cliente SVN.
 * Ler as especificações do trabalho.
 * Ler a parte do livro referente ao trabalho do seu grupo e encontrar os requisitos e estruturas de dados necessários.
 * Discutir com o grupo qual estratégia será utilizada.
