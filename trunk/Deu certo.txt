@@ -1,0 +1,16 @@
+1ª - Definição das funções, das Estruturas de dados e técnicas de implementação.
+Acaba: 13/02
+2ª - Codificação das funções.
+Acaba: 20/02
+3ª - Codificação para integração.
+Acaba: 27/02
+4ª - Testes e documentação.
+Acaba: 06/03
+
+
+Tarefas 1ª semana:
+* Ler as especificações do trabalho.
+* Ler a parte do livro referente ao trabalho do seu grupo e encontrar os requisitos e estruturas de dados necessários.
+* Discutir com o grupo qual estratégia será utilizada.
+* Definir com o grupo quais funções serão implementadas no programa.
+* Definir quem vai implementar qual função.
