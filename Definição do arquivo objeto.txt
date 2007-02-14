@@ -11,11 +11,17 @@ Descrição:	Este arquivo padroniza os arquivos objetos, que afetam a saída gerada
 1	x INT				 4 bytes	Tamanho do código
 1	x INT				 4 bytes	Tamanho da pilha necessária
 1	x INT				 4 bytes	Endereço do começo da execução
-n	x STRUCT SIMBOLO		13 bytes	Simbolo global
+n	x STRUCT SIMBOLO		13 bytes	Tabela de definições
 {
 	8	x CHAR		 1 byte	Nome do símbolo
 	1	x INT			 4 bytes	Endereço do símbolo
 	1	x CHAR		 1 byte	Informação de relocação
+}
+n	x STRUCT USO_SIMBOLO	13 bytes	Tabela de Usos
+{
+	8	x CHAR		 1 byte	Nome do símbolo
+	1	x INT			 4 bytes	Endereço onde o símbolo é referenciado
+	1	x CHAR		 1 byte	Sinal
 }
 n 	x STRUCT CODIGO_RELOC	34 bytes	Instruções de máquina + sua informação de relocação
 {
@@ -25,5 +31,7 @@ n 	x STRUCT CODIGO_RELOC	34 bytes	Instruções de máquina + sua informação de relo
 
 - Observações
 
-As STRUCT SIMBOLO acabam quando for encontrado uma com nome, endereço e informação NULL.
+As STRUCT SIMBOLO e USO_SIMBOLO acabam quando for encontrado uma com nome e endereço vazio/0.
 A última STRUCT CODIGO_RELOC poderá ter alguns SHORT INT´s que não são efetivamente instruções de máquina, mas estão ali para completar a STRUCT, isso pode ser verificado utilizando o tamanho do código.
+Se a Informação de relocação é diferente de 0 então o símbolo é relativo, se 0 é absoluto.
+Se o sinal é diferente de 0 então deve somar, se 0 deve substrair.
