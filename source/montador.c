@@ -54,6 +54,8 @@ int primeira_passagem(FILE *arquivo)
    leu = 1;
    line = 0;
    Tsimbolos *pos;
+   Tdefinicoes *pos_def;
+   Tusos *pos_uso;
    
    while(leu)                                                    // Enquanto o parser obter uma linha do arquivo fonte, faz o processamento.
       {
@@ -64,26 +66,50 @@ int primeira_passagem(FILE *arquivo)
       if(label[0] != '\0')                                       // Verifica se existe label na linha.
          {
          if(pesquisa_Tsimbolos(label))                           // Verifica se o símbolo já está na tabela de símbolos (retorna o endereço).
-            coloca_Terros(1, line, lcounter, label);             // Símbolo multidefinido!!
+            coloca_Terros(1, line, lcounter, label);             // Símbolo multidefinido na tabela de símbolos!!
          else                                                    // Se o símbolo ainda não está na tabela de símbolos...
             {
             pos = coloca_Tsimbolos(label);                       // Coloca o símbolo na tabela e salva o endereço.
             coloca_Tendereco(lcounter, pos);                     // Coloca o endereço que a label representa na tabela.
             }
+         pos_def = pesquisa_Tdef(label);                         // Verifica se o símbolo está na tabela de definições.
+         if(pos_def)
+            if(!coloca_Tdef_end(lcounter, pos_def))              // Coloca o endereço correspondente ao símbolo na tabela de definições.
+               coloca_Terros(4, line, lcounter, label);          // Se já existe um endereço na tab. de definições para este símbolo, informa o erro.            
          } 
       if(operacao[0] != '\0')                                    // Verifica se há alguma instrução especificada na linha.
          {
          id_op = verifica_operacao(operacao);                    // Verifica a validade da operação (se está na tabela de instruções).
          if(!id_op)
             coloca_Terros(2, line, lcounter, operacao);          // Coloca informação de operação desconhecida na tabela de erros.
+         if(id_op == 18)                                         // Caso seja a utilização de um símbolo de outro módulo...
+            {
+            coloca_Tusos(label);                                  // Coloca o símbolo na tabela de usos.
+            }
          } 
       if(op1[0] != '\0')                                         // Verifica se há operando(s).         
          {
          if((op1[0] != '@') && !(numero(op1[0])))                // Se o operando não é um literal nem um endereço (não-símbolo)...
             {
+            pos_uso = pesquisa_Tusos(op1);                       // Pesquisa o símbolo na tabela de usos.
+            if(pos_uso)                                          // Se o símbolo já está declarado na tabela de usos...
+               {
+               if(!coloca_Tusos_end(lcounter, pos_uso))          // Tenta colocar só endereço na sua entrada.
+                  coloca_Tusos_novo(lcounter, op1);              // Se o endereço já está definido, então esta é uma segunda entrada na tabeça de usos.
+               }
             pos = pesquisa_Tsimbolos(op1);                       // Pesquisa o símbolo na tabela e devolve a posição.
             if(pos == NULL)
                coloca_Tsimbolos(op1);                            // Coloca o símbolo na tabela de símbolos.
+            if(id_op == 17)                                      // Caso seja uma declaração de símbolo global (EXTDEF é 17).
+               {
+               pos_def = pesquisa_Tdef(op1);                     // Pesquisa o símbolo na tabela de definições
+               if(pos_def == NULL)                               // Se é um símbolo que ainda não foi definido como global...
+                  coloca_Tdef(op1);                              // define.
+               }
+            else                                                 // Senão...
+               {
+               coloca_Terros(3, line, lcounter+1, op1);          // Coloca a informação de símbolo global multidefinido na tabela de definições.
+               }
             }
          else if(op1[0] == '@')                                  // Caso o operando seja um literal...
             {
@@ -92,6 +118,12 @@ int primeira_passagem(FILE *arquivo)
          if(op2[0] != '\0')                                      // Verifica se há um segundo operando.
             if(!numero(op2[0]))                                  // Se o segundo operando não é um endereço (não-símbolo)...
                {
+               pos_uso = pesquisa_Tusos(op1);                       // Pesquisa o símbolo na tabela de usos.
+               if(pos_uso)                                          // Se o símbolo já está declarado na tabela de usos...
+                  {
+                  if(!coloca_Tusos_end(lcounter, pos_uso))          // Tenta colocar só endereço na sua entrada.
+                     coloca_Tusos_novo(lcounter, op1);              // Se o endereço já está definido, então esta é uma segunda entrada na tabeça de usos.
+                  }
                pos = pesquisa_Tsimbolos(op1);                    // Pesquisa o símbolo na tabela e devolve a posição.
                if(pos == NULL)
                   coloca_Tsimbolos(op1);                         // Coloca o símbolo na tabela de símbolos.
