@@ -5,10 +5,14 @@
 
 void inicializa_tabelas()
    {
-   Tsimbolos *Tabela_S = NULL;
-   Tsimbolos *ultimo_simbolo = NULL;
-   Terros *Tabela_erros = NULL;
-   Terros *ultimo_erro = NULL;
+   Tabela_S = NULL;
+   ultimo_simbolo = NULL;
+   Tabela_erros = NULL;
+   ultimo_erro = NULL;
+   Tab_def = NULL;
+   ultima_def = NULL;
+   Tab_usos = NULL;
+   ultima_usos = NULL;
    tabela_instrucoes();     
    }
    
@@ -144,3 +148,113 @@ Tsimbolos *pesquisa_Tsimbolos(char *op1)
       }
    return NULL;
    }
+
+
+// MANIPULANDO TABELA DE DEFINIÇÕES:
+void coloca_Tdef(char *op1)
+   {
+   Tdefinicoes *novo;
+   novo = malloc(sizeof(Tdefinicoes));
+   strcpy(novo->nome, op1);
+   novo->endereco = -1;
+   novo->reloc = -1;
+
+   if(!Tab_def)
+      {
+      Tab_def = novo;
+      Tab_def->prox = NULL;
+      ultima_def = Tab_def;
+      }
+   else
+      {
+      ultima_def->prox = novo;
+      ultima_def = novo;
+      }
+   }
+   
+Tdefinicoes *pesquisa_Tdef(char *op1)
+   {
+   Tdefinicoes *aux;
+   aux = Tab_def;
+   while(aux)
+      {
+      if(strcmp(op1, aux->nome))
+         return aux;
+      else     
+         aux = aux->prox;
+      }
+   return NULL;
+   }
+
+int coloca_Tdef_end(int lcounter, Tdefinicoes *pos_def)
+   {
+   if(pos_def->endereco == -1)
+      return 0;
+   else
+      pos_def->endereco = lcounter;
+   }
+
+// MANIPULANDO TABELA DE USOS:
+void coloca_Tusos(char *label)
+   {
+   Tusos *novo;
+   novo = malloc(sizeof(Tusos));
+   strcpy(novo->nome, label);
+   novo->endereco = -1;
+   novo->reloc = -1;
+
+   if(!Tab_usos)
+      {
+      Tab_usos = novo;
+      Tab_usos->prox = NULL;
+      ultima_usos = Tab_usos;
+      }
+   else
+      {
+      ultima_usos->prox = novo;
+      ultima_usos = novo;
+      }
+   }
+
+void coloca_Tusos_novo(int lcounter, char *op)
+   {
+   Tusos *novo;
+   novo = malloc(sizeof(Tusos));
+   strcpy(novo->nome, op);
+   novo->endereco = lcounter;
+   novo->reloc = -1;
+
+   if(!Tab_usos)
+      {
+      Tab_usos = novo;
+      Tab_usos->prox = NULL;
+      ultima_usos = Tab_usos;
+      }
+   else
+      {
+      ultima_usos->prox = novo;
+      ultima_usos = novo;
+      }
+   }
+
+int coloca_Tusos_end(int lcounter, Tusos *pos_uso)
+   {
+   if(pos_uso->endereco == -1)
+      return 0;
+   else
+      pos_uso->endereco = lcounter;
+   }
+
+Tusos *pesquisa_Tusos(char *op)
+   {
+   Tusos *aux;
+   aux = Tab_usos;
+   while(aux)
+      {
+      if(strcmp(op, aux->nome))
+         return aux;
+      else     
+         aux = aux->prox;
+      }
+   return NULL;
+   }      
