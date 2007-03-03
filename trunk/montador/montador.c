@@ -105,7 +105,7 @@ int primeira_passagem(FILE *arquivo)
             pos = pesquisa_Tsimbolos(op1);                       // Pesquisa o símbolo na tabela e devolve a posição.
             if(pos == NULL)
                coloca_Tsimbolos(op1);                            // Coloca o símbolo na tabela de símbolos.
-            if(id_op == 17)                                      // Caso seja uma declaração de símbolo global (EXTDEF é 17).
+            if(id_op == 18)                                      // Caso seja uma declaração de símbolo global (EXTDEF é 18).
                {
                pos_def = pesquisa_Tdef(op1);                     // Pesquisa o símbolo na tabela de definições
                if(pos_def == NULL)                               // Se é um símbolo que ainda não foi definido como global...
