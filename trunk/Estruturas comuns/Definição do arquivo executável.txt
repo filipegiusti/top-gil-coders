@@ -1,0 +1,12 @@
+Projeto:	Sistema montador-ligador-carregador para uma arquitetura hipotética
+Codenome:	Top Gil Coders
+Data:		13/02/07
+Autores:	Filipe Giusti
+Descrição:	Este arquivo padroniza os arquivos executáveis ".hpx", que afetam a saída gerada pelo ligador e o que o carregador pode esperar receber na sua entrada.
+
+- Estrutura do arquivo:
+
+1	x INT				 4 bytes	Tamanho do código
+1	x INT				 4 bytes	Tamanho da pilha necessária
+1	x INT				 4 bytes	Endereço do começo da execução
+n 	x SHORT INT			 2 bytes	Instruções de máquina
