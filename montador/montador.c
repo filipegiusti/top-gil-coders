@@ -44,11 +44,11 @@ int main()
 
 int primeira_passagem(FILE *arquivo)
    {
-   char label[8];
-   char operacao[6];
-   char op1[8];
-   char op2[8];
-   char comment[40];
+   char label[9];
+   char operacao[7];
+   char op1[9];
+   char op2[9];
+   char comment[81];
    label[0] = '\0';
    operacao[0] = '\0';
    op1[0] = '\0';
@@ -87,7 +87,7 @@ int primeira_passagem(FILE *arquivo)
          id_op = verifica_operacao(operacao);                    // Verifica a validade da operação (se está na tabela de instruções).
          if(!id_op)
             coloca_Terros(2, line, lcounter, operacao);          // Coloca informação de operação desconhecida na tabela de erros.
-         if(id_op == 18)                                         // Caso seja a utilização de um símbolo de outro módulo...
+         if(id_op == 19)                                         // Caso seja a utilização de um símbolo de outro módulo...
             {
             coloca_Tusos(label);                                  // Coloca o símbolo na tabela de usos.
             }
@@ -159,7 +159,7 @@ int parser(FILE *arquivo, char *label, char *operacao, char *op1, char *op2, cha
          sscanf(linha, "%s %s %s %s", operacao, op1, op2, comment);
          printf("operacao: %s | op1: %s | op2: %s | comment: %s\n", operacao, op1, op2, comment);
          }
-      else if(linha[0] != '#')
+      else if(linha[0] != '*')
          {
          sscanf(linha, "%s %s %s %s %s", label, operacao, op1, op2, comment);
          printf("label: %s | operacao: %s | op1: %s | op2: %s | comment: %s\n", label, operacao, op1, op2, comment);
