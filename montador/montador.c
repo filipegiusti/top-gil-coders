@@ -1,19 +1,25 @@
-/*******************************************************************************
-  UNIVERSIDADE FEDERAL DE PELOTAS
-  Departamento de Informática
-  Curso de Bacharelado em Ciência da Computação
-  
-  SISTEMA MONTADOR-LIGADOR-CARREGADOR PARA UMA ARQUITETURA HIPOTÉTICA
-  Parte 1: MONTADOR
+/*
+	Sistema de Programação para um computador hipotético
+    Parte 1: Montador
+            
+	Projetos em Computação 1 2006/2
 
-  Trabalho prático elaborado na disciplina de Projetos em Computação I
-  Professor: Gil Carlos Rodrigues Medeiros
-  
-  Autores: Guilherme Corrêa
-           ?
-  Data: 06/03/2007
-  Última alteração: 24/02/2007
-*******************************************************************************/
+	Autores:
+        Guilherme Corrêa <>
+		Filipe Giusti <filipegiusti@gmail.com>
+
+	Montador da arquitetura hipotética
+    vista em aula, realiza a montagem do
+    arquivo "MASMAPRG.ASM" proveniente
+    do processador de macros. O formato 
+    do arquivo está descrito em 
+    "".
+    
+    Gera como saída um arquivo para o
+    ligador relocador que está descrito em
+    "Definição do arquivo objeto.txt".
+
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
