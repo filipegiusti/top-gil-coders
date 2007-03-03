@@ -41,7 +41,7 @@ struct Tinstrucoes
    {
    char nome[6];
    int length;
-   } Tinstrucoes[22];
+   } Tinstrucoes[23];
 
 Tsimbolos *Tabela_S;
 Tsimbolos *ultimo_simbolo;

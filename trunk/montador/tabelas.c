@@ -20,67 +20,66 @@ void inicializa_tabelas()
 void tabela_instrucoes()
    {
    // Instruções de máquina
-   strcpy(Tinstrucoes[1].nome, "ADD");
-   Tinstrucoes[1].length = 2;
-   strcpy(Tinstrucoes[2].nome, "BR");
-   Tinstrucoes[2].length = 2;   
-   strcpy(Tinstrucoes[3].nome, "BRNEG");
+   strcpy(Tinstrucoes[0].nome, "ADD");
+   Tinstrucoes[0].length = 2;
+   strcpy(Tinstrucoes[1].nome, "BR");
+   Tinstrucoes[1].length = 2;   
+   strcpy(Tinstrucoes[2].nome, "BRNEG");
+   Tinstrucoes[2].length = 2;
+   strcpy(Tinstrucoes[3].nome, "BRPOS");
    Tinstrucoes[3].length = 2;
-   strcpy(Tinstrucoes[4].nome, "BRPOS");
+   strcpy(Tinstrucoes[4].nome, "BRZERO");
    Tinstrucoes[4].length = 2;
-   strcpy(Tinstrucoes[5].nome, "BRZERO");
+   strcpy(Tinstrucoes[5].nome, "CALL");
    Tinstrucoes[5].length = 2;
-   strcpy(Tinstrucoes[6].nome, "CALL");
-   Tinstrucoes[6].length = 2;
-   strcpy(Tinstrucoes[7].nome, "COPY");
-   Tinstrucoes[7].length = 3;
-   strcpy(Tinstrucoes[8].nome, "DIVIDE");
-   Tinstrucoes[8].length = 2;      
-   strcpy(Tinstrucoes[9].nome, "LOAD");
+   strcpy(Tinstrucoes[6].nome, "COPY");
+   Tinstrucoes[6].length = 3;
+   strcpy(Tinstrucoes[7].nome, "DIVIDE");
+   Tinstrucoes[7].length = 2;      
+   strcpy(Tinstrucoes[8].nome, "LOAD");
+   Tinstrucoes[8].length = 2;
+   strcpy(Tinstrucoes[9].nome, "MULT");
    Tinstrucoes[9].length = 2;
-   strcpy(Tinstrucoes[10].nome, "MULT");
+   strcpy(Tinstrucoes[10].nome, "READ");
    Tinstrucoes[10].length = 2;
-   strcpy(Tinstrucoes[11].nome, "READ");
-   Tinstrucoes[11].length = 2;
-   strcpy(Tinstrucoes[12].nome, "RET");
+   strcpy(Tinstrucoes[11].nome, "RET");
+   Tinstrucoes[11].length = 1;
+   strcpy(Tinstrucoes[12].nome, "STOP");
    Tinstrucoes[12].length = 1;
-   strcpy(Tinstrucoes[13].nome, "STOP");
-   Tinstrucoes[13].length = 1;
-   strcpy(Tinstrucoes[14].nome, "STORE");
+   strcpy(Tinstrucoes[13].nome, "STORE");
+   Tinstrucoes[13].length = 2;
+   strcpy(Tinstrucoes[14].nome, "SUB");
    Tinstrucoes[14].length = 2;
-   strcpy(Tinstrucoes[15].nome, "SUB");
+   strcpy(Tinstrucoes[15].nome, "WRITE");
    Tinstrucoes[15].length = 2;
-   strcpy(Tinstrucoes[16].nome, "WRITE");
-   Tinstrucoes[16].length = 2;
    
    // Instruções de montagem
-   strcpy(Tinstrucoes[15].nome, "CONST");
-   Tinstrucoes[15].length = 1;   
-   strcpy(Tinstrucoes[16].nome, "END");
-   Tinstrucoes[16].length = 0;   
-   strcpy(Tinstrucoes[17].nome, "EXTDEF");
+   strcpy(Tinstrucoes[16].nome, "CONST");
+   Tinstrucoes[16].length = 1;   
+   strcpy(Tinstrucoes[17].nome, "END");
    Tinstrucoes[17].length = 0;   
-   strcpy(Tinstrucoes[18].nome, "EXTR");
-   Tinstrucoes[18].length = 0;
-   strcpy(Tinstrucoes[19].nome, "SPACE");
-   Tinstrucoes[19].length = 1;
-   strcpy(Tinstrucoes[20].nome, "STACK");
-   Tinstrucoes[20].length = 0;
-   strcpy(Tinstrucoes[20].nome, "START");
-   Tinstrucoes[20].length = 0;
+   strcpy(Tinstrucoes[18].nome, "EXTDEF");
+   Tinstrucoes[18].length = 0;   
+   strcpy(Tinstrucoes[19].nome, "EXTR");
+   Tinstrucoes[19].length = 0;
+   strcpy(Tinstrucoes[20].nome, "SPACE");
+   Tinstrucoes[20].length = 1;
+   strcpy(Tinstrucoes[21].nome, "STACK");
+   Tinstrucoes[21].length = 0;
+   strcpy(Tinstrucoes[22].nome, "START");
+   Tinstrucoes[22].length = 0;
    }
-   
+
 int verifica_operacao(char *operacao)
-   {
-   int i = 1;
-   while(i<=20)
-      {
-      if(!strcmp(Tinstrucoes[i].nome, operacao))
-         return i;
-      i++;
-      }
-   return 0;
-   }
+    {
+    int i;
+    for (i = 0 ; i<23 ; i++)
+        {
+        if(!strcmp(Tinstrucoes[i].nome, operacao))
+            return i;
+        }
+    return 0;
+    }
 
 // MANIPULANDO TABELA DE ERROS:
 void coloca_Terros(int erro, int linha, int lcounter, char *texto)
@@ -135,13 +134,13 @@ void coloca_Tendereco(int lcounter, Tsimbolos *pos)
    pos->reloc = 1;          // Quando que o símbolo não será relativo??
    }
    
-Tsimbolos *pesquisa_Tsimbolos(char *op1)
+Tsimbolos *pesquisa_Tsimbolos(char *simbolo)
    {
    Tsimbolos *aux;
    aux = Tabela_S;
    while(aux)
       {
-      if(strcmp(op1, aux->nome))
+      if(strcmp(simbolo, aux->nome))
          return aux;
       else     
          aux = aux->prox;
@@ -188,7 +187,7 @@ Tdefinicoes *pesquisa_Tdef(char *op1)
 
 int coloca_Tdef_end(int lcounter, Tdefinicoes *pos_def)
    {
-   if(pos_def->endereco == -1)
+   if(pos_def->endereco != -1)
       return 0;
    else
       pos_def->endereco = lcounter;
