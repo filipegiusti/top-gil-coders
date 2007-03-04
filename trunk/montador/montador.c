@@ -5,7 +5,7 @@
 	Projetos em Computação 1 2006/2
 
 	Autores:
-        Guilherme Corrêa <>
+        Guilherme Corrêa <gcorrea@gmail.com>
 		Filipe Giusti <filipegiusti@gmail.com>
 
 	Montador da arquitetura hipotética
