@@ -13,20 +13,20 @@ Descrição:	Este arquivo padroniza os arquivos objetos, que afetam a saída gerada
 1	x INT				 4 bytes	Endereço do começo da execução
 n	x STRUCT SIMBOLO		13 bytes	Tabela de definições
 {
-	8	x CHAR		 1 byte	Nome do símbolo
-	1	x INT			 4 bytes	Endereço do símbolo
-	1	x CHAR		 1 byte	Informação de relocação
+	8	x CHAR		 1 byte		Nome do símbolo
+	1	x INT		 4 bytes	Endereço do símbolo
+	1	x CHAR		 1 byte		Informação de relocação
 }
 n	x STRUCT USO_SIMBOLO	13 bytes	Tabela de Usos
 {
-	8	x CHAR		 1 byte	Nome do símbolo
-	1	x INT			 4 bytes	Endereço onde o símbolo é referenciado
-	1	x CHAR		 1 byte	Sinal
+	8	x CHAR		 1 byte		Nome do símbolo
+	1	x INT		 4 bytes	Endereço onde o símbolo é referenciado
+	1	x CHAR		 1 byte		Sinal
 }
 n 	x STRUCT CODIGO_RELOC	34 bytes	Instruções de máquina + sua informação de relocação
 {
-	16	x SHORT INT		 2 bytes	Instruções de máquina
-	1	x SHORT INT		 2 bytes	Informação de relocação
+	16	x SHORT INT	2 bytes		Instruções de máquina
+	1	x SHORT INT	2 bytes		Informação de relocação
 }
 
 - Observações
