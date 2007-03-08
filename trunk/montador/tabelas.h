@@ -9,6 +9,15 @@ typedef struct Tsimbolos
 /* tipos de erros:
          1 -> símbolo multidefinido;
          2 -> operação inválida;
+         3 -> número errado de operandos para a operação;
+         4 -> label inválido;
+         todo: 5 -> símbolo indefinido;
+         todo: 6 -> falta diretiva end;
+         7 -> problema na diretiva stack;
+         8 -> tamanho de pilha não definido;
+         9 -> falta a diretiva start;
+         10 -> problema na diretiva const;
+         
 */
 typedef struct Terros
    {
@@ -39,6 +48,8 @@ struct Tinstrucoes
    {
    char nome[6];
    int length;
+   int num_operandos;
+   int opcode;
    } Tinstrucoes[23];
 
 Tsimbolos *Tabela_S;

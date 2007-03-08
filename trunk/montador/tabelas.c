@@ -24,52 +24,91 @@ void tabela_instrucoes()
    // Instruções de máquina
    strcpy(Tinstrucoes[0].nome, "ADD");
    Tinstrucoes[0].length = 2;
+   Tinstrucoes[0].num_operandos = 1;
+   Tinstrucoes[0].opcode = 2;
    strcpy(Tinstrucoes[1].nome, "BR");
-   Tinstrucoes[1].length = 2;   
+   Tinstrucoes[1].length = 2;
+   Tinstrucoes[1].num_operandos = 1;
+   Tinstrucoes[1].opcode = 0;
    strcpy(Tinstrucoes[2].nome, "BRNEG");
    Tinstrucoes[2].length = 2;
+   Tinstrucoes[2].num_operandos = 1;
+   Tinstrucoes[2].opcode = 5;
    strcpy(Tinstrucoes[3].nome, "BRPOS");
    Tinstrucoes[3].length = 2;
+   Tinstrucoes[3].num_operandos = 1;
+   Tinstrucoes[3].opcode = 1;
    strcpy(Tinstrucoes[4].nome, "BRZERO");
    Tinstrucoes[4].length = 2;
+   Tinstrucoes[4].num_operandos = 1;
+   Tinstrucoes[4].opcode = 4;
    strcpy(Tinstrucoes[5].nome, "CALL");
    Tinstrucoes[5].length = 2;
+   Tinstrucoes[5].num_operandos = 1;
+   Tinstrucoes[5].opcode = 15;
    strcpy(Tinstrucoes[6].nome, "COPY");
    Tinstrucoes[6].length = 3;
+   Tinstrucoes[6].num_operandos = 2;
+   Tinstrucoes[6].opcode = 13;
    strcpy(Tinstrucoes[7].nome, "DIVIDE");
-   Tinstrucoes[7].length = 2;      
+   Tinstrucoes[7].length = 2;
+   Tinstrucoes[7].num_operandos = 1;
+   Tinstrucoes[7].opcode = 10;
    strcpy(Tinstrucoes[8].nome, "LOAD");
    Tinstrucoes[8].length = 2;
+   Tinstrucoes[8].num_operandos = 1;
+   Tinstrucoes[8].opcode = 3;
    strcpy(Tinstrucoes[9].nome, "MULT");
    Tinstrucoes[9].length = 2;
+   Tinstrucoes[9].num_operandos = 1;
+   Tinstrucoes[9].opcode = 14;
    strcpy(Tinstrucoes[10].nome, "READ");
    Tinstrucoes[10].length = 2;
+   Tinstrucoes[10].num_operandos = 1;
+   Tinstrucoes[12].opcode = 12;
    strcpy(Tinstrucoes[11].nome, "RET");
    Tinstrucoes[11].length = 1;
+   Tinstrucoes[11].num_operandos = 0;
+   Tinstrucoes[11].opcode = 16;
    strcpy(Tinstrucoes[12].nome, "STOP");
    Tinstrucoes[12].length = 1;
+   Tinstrucoes[12].num_operandos = 0;
+   Tinstrucoes[12].opcode = 11;
    strcpy(Tinstrucoes[13].nome, "STORE");
    Tinstrucoes[13].length = 2;
+   Tinstrucoes[13].num_operandos = 1;
+   Tinstrucoes[13].opcode = 7;
    strcpy(Tinstrucoes[14].nome, "SUB");
    Tinstrucoes[14].length = 2;
+   Tinstrucoes[14].num_operandos = 1;
+   Tinstrucoes[14].opcode = 6;
    strcpy(Tinstrucoes[15].nome, "WRITE");
    Tinstrucoes[15].length = 2;
+   Tinstrucoes[15].num_operandos = 1;
+   Tinstrucoes[15].opcode = 8;
    
    // Instruções de montagem
    strcpy(Tinstrucoes[16].nome, "CONST");
-   Tinstrucoes[16].length = 1;   
+   Tinstrucoes[16].length = 1;
+   Tinstrucoes[16].num_operandos = 1;   
    strcpy(Tinstrucoes[17].nome, "END");
    Tinstrucoes[17].length = 0;   
+   Tinstrucoes[17].num_operandos = 0;
    strcpy(Tinstrucoes[18].nome, "EXTDEF");
-   Tinstrucoes[18].length = 0;   
+   Tinstrucoes[18].length = 0;
+   Tinstrucoes[18].num_operandos = 1;
    strcpy(Tinstrucoes[19].nome, "EXTR");
    Tinstrucoes[19].length = 0;
+   Tinstrucoes[19].num_operandos = 0;
    strcpy(Tinstrucoes[20].nome, "SPACE");
    Tinstrucoes[20].length = 1;
+   Tinstrucoes[20].num_operandos = 0;
    strcpy(Tinstrucoes[21].nome, "STACK");
    Tinstrucoes[21].length = 0;
+   Tinstrucoes[21].num_operandos = 1;
    strcpy(Tinstrucoes[22].nome, "START");
    Tinstrucoes[22].length = 0;
+   Tinstrucoes[22].num_operandos = 1;
    }
 
 /* Retorna: Índice da operação na tabela de instruções
@@ -141,6 +180,20 @@ void coloca_Terros(int erro, int linha, int lcounter, char *texto)
       ultimo_erro = novo;
       }
    }
+   
+int imprime_erros()
+   {
+   if(!Tabela_erros)
+      return 0;
+   else
+      {
+      Terros *aux;
+      printf("TABELA DE ERROS\n");    
+      for (aux = Tabela_erros ; aux ; aux = aux->prox)
+         printf ("\tTexto = %s\tlcounter = %d\tlinha = %d\ttipo = %d\n",aux->texto, aux->lcounter, aux->linha, aux->tipo);
+      }
+    }
+   
    
    
 // *********************************** MANIPULANDO TABELA DE SÍMBOLOS:
