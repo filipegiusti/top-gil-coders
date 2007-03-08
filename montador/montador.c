@@ -5,7 +5,7 @@
 	Projetos em Computação 1 2006/2
 
 	Autores:
-        Guilherme Corrêa <>
+        Guilherme Corrêa <gcorrea@gmail.com>
 		Filipe Giusti <filipegiusti@gmail.com>
 
 	Montador da arquitetura hipotética
@@ -39,7 +39,12 @@ int main()
    inicializa_tabelas(); 
    primeira_passagem(arquivo);
    imprime_tabelas();
-// TODO: verificar se tem erros, imprimir e parar se tiver.   
+// TODO: verificar se tem erros, imprimir e parar se tiver.
+   FILE *saida;
+   if(!(saida = fopen(ARQUIVO, "wb")))
+      {
+      exit;
+      }
    segunda_passagem();
    system("PAUSE");
    }
@@ -164,5 +169,6 @@ void coloca_pool(char *op)
 
 int segunda_passagem()
    {
-   // começarei em breve... :)
+
+   
    }
