@@ -1,4 +1,5 @@
- START 3
+ START
+ STROPS
  STACK 34
 oi EXTR
  EXTDEF teste2
@@ -10,3 +11,5 @@ teste ADD SOMA
  LOAD 12  
  STOP
  END
+* Olá, Guilherme Corrêa
+teste3 SUB oi

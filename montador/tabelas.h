@@ -2,22 +2,23 @@ typedef struct Tsimbolos
    {
    char nome[8];
    int endereco;
+   int linha;
    char reloc;
    struct Tsimbolos *prox;
    } Tsimbolos;
 
-/* tipos de erros:
+/* Tipos de erros:
          1 -> símbolo multidefinido;
          2 -> operação inválida;
          3 -> número errado de operandos para a operação;
          4 -> label inválido;
-         todo: 5 -> símbolo indefinido;
-         todo: 6 -> falta diretiva end;
+         5 -> símbolo indefinido;
+         6 -> falta diretiva end;
          7 -> problema na diretiva stack;
          8 -> tamanho de pilha não definido;
          9 -> falta a diretiva start;
          10 -> problema na diretiva const;
-         
+         11 -> código após a diretiva end;
 */
 typedef struct Terros
    {
@@ -68,9 +69,9 @@ void imprime_tabelas();
 
 void coloca_Terros(int erro, int linha, int lcounter, char *texto);
 
-Tsimbolos *coloca_Tsimbolos(char *label);
+Tsimbolos *coloca_Tsimbolos(char *label, int line);
 void coloca_Tsimbolos_label(char *label, int lcounter, int line);
-void coloca_Tsimbolos_operando(char *op);
+void coloca_Tsimbolos_operando(char *op, int line);
 Tsimbolos *pesquisa_Tsimbolos(char *op1);
 
 void coloca_Tdef(char *op1);

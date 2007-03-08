@@ -199,12 +199,13 @@ int imprime_erros()
 // *********************************** MANIPULANDO TABELA DE SÍMBOLOS:
 
 // Cria nova entrada na tabela.
-Tsimbolos *coloca_Tsimbolos(char *label)
+Tsimbolos *coloca_Tsimbolos(char *label, int linha)
    {
    Tsimbolos *novo;
    novo = malloc(sizeof(Tsimbolos));
    strcpy(novo->nome, label);
    novo->endereco = -1;
+   novo->linha = linha;
    novo->reloc = -1;
    novo->prox = NULL;
 
@@ -231,19 +232,19 @@ void coloca_Tsimbolos_label(char *label, int lcounter, int line)
       coloca_Terros(1, line, lcounter, label);        // Símbolo multidefinido
       return;
       }
-   novo = coloca_Tsimbolos(label);
+   novo = coloca_Tsimbolos(label, line);
    novo->endereco = lcounter;
    novo->reloc = 1;                                 // Quando for simbolo externo.
    }
 
 // Cria nova entrada na tabela proveniente de um operando.
-void coloca_Tsimbolos_operando(char *op)
+void coloca_Tsimbolos_operando(char *op, int linha)
    {
    if(pesquisa_Tsimbolos(op))
       {
       return;
       }
-   coloca_Tsimbolos(op);
+   coloca_Tsimbolos(op, linha);
    }
 
 /* Retorna: Endereço do símbolo na tabela
@@ -263,6 +264,18 @@ Tsimbolos *pesquisa_Tsimbolos(char *simbolo)
    return NULL;
    }
 
+            
+void verifica_Tsimbolos()
+   {
+   Tsimbolos *aux;
+   aux = Tabela_S;
+   while(aux)
+      {
+      if(aux->endereco == -1)
+         coloca_Terros(5, aux->linha, -1, aux->nome);
+      aux = aux->prox;
+      }
+   }
 
 // *********************************** MANIPULANDO TABELA DE DEFINIÇÕES:
     

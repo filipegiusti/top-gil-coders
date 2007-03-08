@@ -5,7 +5,7 @@
 	Projetos em Computação 1 2006/2
 
 	Autores:
-        Guilherme Corrêa <gcorrea@gmail.com>
+      Guilherme Corrêa <gcorrea@gmail.com>
 		Filipe Giusti <filipegiusti@gmail.com>
 
 	Montador da arquitetura hipotética
@@ -18,7 +18,6 @@
     Gera como saída um arquivo para o
     ligador relocador que está descrito em
     "Definição do arquivo objeto.txt".
-
 */
 
 #include <stdio.h>
@@ -37,7 +36,10 @@ int main()
    primeira_passagem();   
    //imprime_tabelas();
    if(imprime_erros())
+      {
+      system("PAUSE");
       return;
+      }
    segunda_passagem();
    system("PAUSE");
    }
@@ -56,9 +58,10 @@ int primeira_passagem()
    op1[0] = '\0';
    op2[0] = '\0';
 
-   int line, id_op, num_op;
+   int line, id_op, num_op, end;
    line = 0;
    num_op = 0;
+   end = 0;
    Tsimbolos *pos;
    Tdefinicoes *pos_def;
    Tusos *pos_uso;
@@ -71,9 +74,11 @@ int primeira_passagem()
 // Enquanto o parser obter uma linha do arquivo fonte, faz o processamento.
    while(parser(arquivo, label, operacao, op1, op2))
       {
+      line++;
       if(label[0] == '*')
          continue;
-      line++;
+      if((end == 1) && ((label[0] != '\0') || (operacao[0] != '\0') || (op1[0] != '\0') || (op1[0] != '\0')))  // Não pode haver código após o END.
+         coloca_Terros(11, line, lcounter, operacao);
       if(label[0] != '\0')                                       // Verifica se existe label na linha.
          {
          if(!isalpha(label[0]))
@@ -95,6 +100,8 @@ int primeira_passagem()
             coloca_Tusos(label);
             pesquisa_Tsimbolos(label)->reloc = 0;
             }
+         else if(id_op == 17)
+            end = 1;
          }
       if(op1[0] != '\0')                                         // Verifica se há operando(s).         
          {
@@ -114,7 +121,7 @@ int primeira_passagem()
             if(pos_uso)
                coloca_Tusos_end(lcounter, pos_uso);
             if(pesquisa_Tsimbolos(op1) == NULL)
-               coloca_Tsimbolos_operando(op1);
+               coloca_Tsimbolos_operando(op1, line);
             if(id_op == 18)                                      // Caso seja uma declaração de símbolo global (EXTDEF é 18).
                coloca_Tdef(op1);
             }
@@ -129,7 +136,7 @@ int primeira_passagem()
                if(pos_uso)
                   coloca_Tusos_end(lcounter, pos_uso);
                if(pesquisa_Tsimbolos(op2) == NULL)
-                  coloca_Tsimbolos_operando(op2);
+                  coloca_Tsimbolos_operando(op2, line);
                }   
             }
          }
@@ -142,10 +149,13 @@ int primeira_passagem()
       op2[0] = '\0';
       num_op = 0;
       }
-   if(tam_pilha == -1)
+   if(tam_pilha == -1)                       // O tamanho da pilha deve ser definido ou há um erro.
       coloca_Terros(8, -1, -1, "STACK");
-   if(start == -1)
+   if(start == -1)                           // O endereço de início da execução deve ser definido ou há um erro.
       coloca_Terros(9, -1, -1, "START");
+   if(end == 0)                              // O fim do código deve ser definido ou há um erro.
+      coloca_Terros(6, line, lcounter, "END");
+   verifica_Tsimbolos();                     // Verifica se há símbolos indefinidos na tabela de símbolos.
    fclose(arquivo);
    return 0;
    }
@@ -182,7 +192,7 @@ int parser(FILE *arquivo, char *label, char *operacao, char *op1, char *op2)
 // Coloca o op na tabela de literais.
 void coloca_pool(char *op)
    {
-   // aguardando função da Francine
+   // aguardando função da Francine...
    }
 
 int segunda_passagem()
@@ -209,8 +219,6 @@ int segunda_passagem()
       return 0;
    if(!(entrada = fopen(ARQUIVO, "r")))
       return 0;
-   /* to do: substituir símbolos por endereços e opcodes
-   */
    fwrite(&lcounter, sizeof(int), 1, saida);
    fwrite(&tam_pilha, sizeof(int), 1, saida);    
    fwrite(&start, sizeof(int), 1, saida);
