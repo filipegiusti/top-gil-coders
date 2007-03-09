@@ -30,7 +30,7 @@ CompilerSet=0
 CompilerSettings=
 
 [Unit1]
-FileName=montador.c
+FileName=uha.c
 CompileCpp=0
 Folder=
 Compile=1
