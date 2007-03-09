@@ -380,7 +380,7 @@ Tusos *pesquisa_Tusos(char *op)
    aux = Tab_usos;
    while(aux)
       {
-      if(strcmp(op, aux->nome))
+      if(!strcmp(op, aux->nome))
          return aux;
       else     
          aux = aux->prox;
