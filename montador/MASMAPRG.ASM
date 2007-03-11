@@ -1,15 +1,16 @@
- START
- STROPS
- STACK 34
+ START 1
+ STACK 3
 oi EXTR
- EXTDEF teste2
+ EXTDEF teste
 OLA COPY OP1 OP2
 SOMA ADD 23
-NUM CONST 34
- ADD sera
-teste ADD SOMA
- LOAD 12  
+ CONST 34
+ ADD 45
+OP1 CONST 2
+teste ADD sera
+sera ADD SOMA
+ LOAD 12
+OP2 SPACE
  STOP
  END
 * Olá, Guilherme Corrêa
-teste3 SUB oi
