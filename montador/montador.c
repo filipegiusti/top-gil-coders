@@ -199,8 +199,8 @@ int segunda_passagem()
    {
    FILE *saida;
    FILE *entrada;
-   Tdefinicoes *aux_de;
-   Tusos *aux_usos;
+   Tdefinicoes *aux_de, *def_blank;
+   Tusos *aux_usos, *usos_blank;
    short int info_reloc, operacao_num, op1_num, op2_num;
    int i, id_op;
    char label[9];
@@ -222,10 +222,20 @@ int segunda_passagem()
    fwrite(&lcounter, sizeof(int), 1, saida);
    fwrite(&tam_pilha, sizeof(int), 1, saida);    
    fwrite(&start, sizeof(int), 1, saida);
+   
    for(aux_de = Tab_def; aux_de; aux_de = aux_de->prox)
       fwrite(aux_de, sizeof(Tdefinicoes), 1, saida);
+   def_blank = malloc(sizeof(Tdefinicoes));           // cria separador
+   def_blank->endereco = 0;
+   def_blank->reloc = 0;
+   fwrite(def_blank, sizeof(Tdefinicoes), 1, saida);  // imprime separador
+   
    for(aux_usos = Tab_usos; aux_usos; aux_usos = aux_usos->prox)
       fwrite(aux_usos, sizeof(Tab_usos), 1, saida);
+   usos_blank = malloc(sizeof(Tab_usos));           // cria separador
+   usos_blank->endereco = 0;
+   usos_blank->reloc = 0;
+   fwrite(usos_blank, sizeof(Tab_usos), 1, saida);  // imprime separador
       
    while(parser(entrada, label, operacao, op1, op2))
       {
