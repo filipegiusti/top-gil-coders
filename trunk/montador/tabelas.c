@@ -229,8 +229,16 @@ void coloca_Tsimbolos_label(char *label, int lcounter, int line)
    Tsimbolos *novo;
    if(pesquisa_Tsimbolos(label))
       {
-      coloca_Terros(1, line, lcounter, label);        // Símbolo multidefinido
-      return;
+      if(pesquisa_Tsimbolos(label)->endereco != -1)
+         {
+         coloca_Terros(1, line, lcounter, label);        // Símbolo multidefinido
+         return;
+         }
+      else
+         {
+         pesquisa_Tsimbolos(label)->endereco = lcounter;
+         return;
+         }
       }
    novo = coloca_Tsimbolos(label, line);
    novo->endereco = lcounter;
