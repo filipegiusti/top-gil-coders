@@ -1,16 +1,10 @@
- START 1
- STACK 3
-oi EXTR
- EXTDEF teste
-OLA COPY OP1 OP2
-SOMA ADD 23
- CONST 34
- ADD 45
-OP1 CONST 2
-teste ADD sera
-sera ADD SOMA
- LOAD 12
-OP2 SPACE
- STOP
- END
-* Olá, Guilherme Corrêa
+	START	inicio
+	STACK	20
+inicio	LOAD	c34
+	ADD	c2
+	STORE	spc
+	STOP
+spc	SPACE
+c34	CONST	34
+c2	CONST	2
+	END
