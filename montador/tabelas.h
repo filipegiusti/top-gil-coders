@@ -33,7 +33,7 @@ typedef struct Tdefinicoes
    {
    char nome[8];
    int endereco;
-   char reloc;
+   char sinal;
    struct Tdefinicoes *prox;
    } Tdefinicoes;
 

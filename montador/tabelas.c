@@ -141,7 +141,7 @@ void imprime_tabelas() {
     }
     printf("TABELA DE DEFINICOES\n");    
     for (aux_Td = Tab_def ; aux_Td ; aux_Td = aux_Td->prox) {
-        printf ("\tNome = %s\tendereco = %d\treloc = %d\n",aux_Td->nome, aux_Td->endereco, aux_Td->reloc);
+        printf ("\tNome = %s\tendereco = %d\tsinal = %d\n",aux_Td->nome, aux_Td->endereco, aux_Td->sinal);
     }
     printf("TABELA DE USOS\n");    
     for (aux_Tu = Tab_usos ; aux_Tu ; aux_Tu = aux_Tu->prox) {
@@ -248,11 +248,13 @@ void coloca_Tsimbolos_label(char *label, int lcounter, int line)
 // Cria nova entrada na tabela proveniente de um operando.
 void coloca_Tsimbolos_operando(char *op, int linha)
    {
+   Tsimbolos *novo;
    if(pesquisa_Tsimbolos(op))
       {
       return;
       }
-   coloca_Tsimbolos(op, linha);
+   novo = coloca_Tsimbolos(op, linha);
+   novo->reloc = 1;
    }
 
 /* Retorna: Endereço do símbolo na tabela
@@ -298,7 +300,7 @@ void coloca_Tdef(char *op1)
    novo = malloc(sizeof(Tdefinicoes));
    strcpy(novo->nome, op1);
    novo->endereco = -1;
-   novo->reloc = -1;
+   novo->sinal = 1;
    novo->prox = NULL;
 
    if(!Tab_def)
@@ -371,7 +373,10 @@ Tusos *coloca_Tusos(char *label)
 void coloca_Tusos_end(int lcounter, Tusos *pos_uso)
    {
    if(pos_uso->endereco == -1)
+      {
       pos_uso->endereco = lcounter;
+      pos_uso->reloc = 1;
+      }
    else
       {
       Tusos *novo;
