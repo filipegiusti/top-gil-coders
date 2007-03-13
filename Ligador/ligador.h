@@ -1,6 +1,6 @@
 #define TAM_TAB 100
 
-short int carregar(char arq[]);
+short int carregar(int nArq, char arq[]);
 short int salvar(char arq[]);
 
 struct tabelaSimbolosGlobal
@@ -26,6 +26,19 @@ struct codigoRelocacao
 };
 typedef struct codigoRelocacao codigoReloc;
 
+/* ERROS
+      1. Símbolo multidefinido
+      2. Símbolo não definido
+*/
+struct Terros
+{
+   short int tipo;
+   char texto[8];
+   struct Terros *prox;
+};
+typedef struct Terros Terros;
+
+
 extern int pilhaGlobal;
 extern int endGlobal;
 extern int tamCodGlobal;
@@ -36,3 +49,6 @@ extern tabelaUsos tabelaUso[];
 extern int auxTabelaUso;
 extern codigoReloc codigo[];
 extern int auxCodigo;
+
+extern Terros *tabelaErros;
+extern Terros *ultimoErro;
