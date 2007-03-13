@@ -5,11 +5,11 @@
 	Projetos em Computação 1 2006/2
 
 	Autores:
-        Mauro Kade <>
-        Rodrigo Prestes <>
-		Filipe Giusti <filipegiusti@gmail.com>
+        Mauro Kade <maurokade@gmail.com>
+        Rodrigo Prestes <rtprestes@gmail.com>
+  		Filipe Giusti <filipegiusti@gmail.com>
 
-	Ligador relocador da arquitetura hipotética
+	 Ligador relocador da arquitetura hipotética
     vista em aula, recebe como argumentos os 
     arquivos a serem ligados provenientes
     do montador. O formato do arquivo está descrito 
@@ -39,33 +39,49 @@ int auxTabelaUso = 0;
 codigoReloc codigo[100*TAM_TAB];
 int auxCodigo = 0;
 
-main(int argc, char *argv[]) {
-    short int   i, ok;          // Auxiliares
+Terros *tabelaErros;
+Terros *ultimoErro;
 
-// TODO: Testar se passou algum argumento.
-
+main(int argc, char *argv[])
+{
+   short int   i, ok;          // Auxiliares
+   char argumento[50][argc-1];
+   if (argc==1)
+   {
+      printf("\nNenhum argumento passado.\n");
+      return;
+   }
 // Executa a 1ª passagem
-    for (i = 1; i < argc; i++) {
-        #ifdef DEBUG
-        printf("\nAbrindo %s",argv[i]);
-        #endif
-        ok = carregar(argv[i]);     
-        /*
-        codigoGlobal = codigoGlobal - ((argc-1)-1)*3;
-      
-            FORTES DUVIDAS A RESPEITO DESSA MERDA AQUI.
-            (argc-1) é qtdade de arquivos
-            ((argc-1)-1) é que o primeiro arquivo vai continuar com os endereços 0, 1 e 2
-        */
-        #ifdef DEBUG
-        printf("\nOK = %d\n",ok);
-        system("pause");
-        #endif
-        if(!ok)
-            printf("\n\n\tFUDEU o %s\n", argv[i]);
-    }
+   for (i = 1; i < argc; i++)
+   {
+      strcpy(argumento[i], argv[i]);
+      strcat(argumento[i], ".txt");
+      #ifdef DEBUG
+      printf("\nAbrindo %s\n",argumento[i]);
+      #endif
+      ok = carregar(i, argumento[i]);
+      #ifdef DEBUG
+      printf("\n\tOK = %d\n",ok);
+      #endif
+      if(!ok)
+         printf("\n\tFUDEU o %s\n", argumento[i]);
+   }
+   tabelaUso[auxTabelaUso+1].endSimbolo = -1;
+// Verifica a existência de símbolos indefinidos
+   simbIndef();
 // Executa a 2ª passagem
-    ok = salvar(argv[1]);
-    if(!ok)
-        printf("\n\n\tFUDEU enquanto salvava");
+   #ifdef DEBUG
+   system("pause");
+   #endif
+   if(tabelaErros != NULL)
+   {
+      imprimeErros();
+      return;
+   }
+   ok = salvar(argv[1]);
+   if(!ok)
+      printf("\n\tFUDEU enquanto salvava\n");   
+   #ifdef DEBUG
+   system("pause");
+   #endif
 }
