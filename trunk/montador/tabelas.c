@@ -128,12 +128,12 @@ int verifica_operacao(char *operacao)
 void imprime_tabelas() {
     int i;
     Tsimbolos *aux_Ts;
-    Tdefinicoes *aux_Td;
-    Tusos *aux_Tu;
+    TdefinicoesEncapsulado *aux_Td;
+    TusosEncapsulado *aux_Tu;
     Terros *aux_Te;
     /*printf("TABELA DE INSTRUÇÕES\n");
     for (i = 0 ; i < 23 ; i++) {
-        printf ("\tNome = %s\tlength = %d\n",Tinstrucoes[i].nome,Tinstrucoes[i].length);
+        printf ("\tNome = %s\tlength = %d\n",Tinstrucoes[i].info.nome,Tinstrucoes[i].length);
     }*/
     printf("TABELA DE SIMBOLOS\n");    
     for (aux_Ts = Tabela_S ; aux_Ts ; aux_Ts = aux_Ts->prox) {
@@ -141,11 +141,11 @@ void imprime_tabelas() {
     }
     printf("TABELA DE DEFINICOES\n");    
     for (aux_Td = Tab_def ; aux_Td ; aux_Td = aux_Td->prox) {
-        printf ("\tNome = %s\tendereco = %d\tsinal = %d\n",aux_Td->nome, aux_Td->endereco, aux_Td->sinal);
+        printf ("\tNome = %s\tendereco = %d\tsinal = %d\n",aux_Td->info.nome, aux_Td->info.endereco, aux_Td->info.sinal);
     }
     printf("TABELA DE USOS\n");    
     for (aux_Tu = Tab_usos ; aux_Tu ; aux_Tu = aux_Tu->prox) {
-        printf ("\tNome = %s\tendereco = %d\treloc = %d\n",aux_Tu->nome, aux_Tu->endereco, aux_Tu->reloc);
+        printf ("\tNome = %s\tendereco = %d\treloc = %d\n",aux_Tu->info.nome, aux_Tu->info.endereco, aux_Tu->info.reloc);
     }
     printf("TABELA DE ERROS\n");    
     for (aux_Te = Tabela_erros ; aux_Te ; aux_Te = aux_Te->prox) {
@@ -292,15 +292,15 @@ void verifica_Tsimbolos()
 // Cria nova entrada na tabela de definições
 void coloca_Tdef(char *op1)
    {
-   Tdefinicoes *novo;
+   TdefinicoesEncapsulado *novo;
    
    if(pesquisa_Tdef(op1))
       return;
    
-   novo = malloc(sizeof(Tdefinicoes));
-   strcpy(novo->nome, op1);
-   novo->endereco = -1;
-   novo->sinal = 1;
+   novo = malloc(sizeof(TdefinicoesEncapsulado));
+   strcpy(novo->info.nome, op1);
+   novo->info.endereco = -1;
+   novo->info.sinal = 1;
    novo->prox = NULL;
 
    if(!Tab_def)
@@ -319,13 +319,13 @@ void coloca_Tdef(char *op1)
 /* Retorna: Endereço do símbolo na tabela
             ou NULL caso nao exista
 */  
-Tdefinicoes *pesquisa_Tdef(char *op1)
+TdefinicoesEncapsulado *pesquisa_Tdef(char *op1)
    {
-   Tdefinicoes *aux;
+   TdefinicoesEncapsulado *aux;
    aux = Tab_def;
    while(aux)
       {
-      if(strcmp(op1, aux->nome))
+      if(strcmp(op1, aux->info.nome))
          return aux;
       else     
          aux = aux->prox;
@@ -333,10 +333,10 @@ Tdefinicoes *pesquisa_Tdef(char *op1)
    return NULL;
    }
 
-int coloca_Tdef_end(int lcounter, Tdefinicoes *pos_def)
+int coloca_Tdef_end(int lcounter, TdefinicoesEncapsulado *pos_def)
    {
-   if(pos_def->endereco == -1)
-      pos_def->endereco = lcounter;
+   if(pos_def->info.endereco == -1)
+      pos_def->info.endereco = lcounter;
    else
       return 0;
    }
@@ -344,13 +344,13 @@ int coloca_Tdef_end(int lcounter, Tdefinicoes *pos_def)
 // *********************************** MANIPULANDO TABELA DE USOS:
     
 // Cria nova entrada na tabela de usos sem endereço.
-Tusos *coloca_Tusos(char *label)
+TusosEncapsulado *coloca_Tusos(char *label)
    {
-   Tusos *novo;
-   novo = malloc(sizeof(Tusos));
-   strcpy(novo->nome, label);
-   novo->endereco = -1;
-   novo->reloc = -1;
+   TusosEncapsulado *novo;
+   novo = malloc(sizeof(TusosEncapsulado));
+   strcpy(novo->info.nome, label);
+   novo->info.endereco = -1;
+   novo->info.reloc = -1;
    novo->prox = NULL;
 
    if(!Tab_usos)
@@ -370,30 +370,30 @@ Tusos *coloca_Tusos(char *label)
 /* Seta endereço de pos_uso na tabela de usos
    ou cria nova entrada na tabela de usos com endereço lcounter
 */
-void coloca_Tusos_end(int lcounter, Tusos *pos_uso)
+void coloca_Tusos_end(int lcounter, TusosEncapsulado *pos_uso)
    {
-   if(pos_uso->endereco == -1)
+   if(pos_uso->info.endereco == -1)
       {
-      pos_uso->endereco = lcounter;
-      pos_uso->reloc = 1;
+      pos_uso->info.endereco = lcounter;
+      pos_uso->info.reloc = 1;
       }
    else
       {
-      Tusos *novo;
-      novo = coloca_Tusos(pos_uso->nome);
-      novo->endereco = lcounter;
-      novo->reloc = 1;               // Quando será outro valor??
+      TusosEncapsulado *novo;
+      novo = coloca_Tusos(pos_uso->info.nome);
+      novo->info.endereco = lcounter;
+      novo->info.reloc = 1;               // Quando será outro valor??
       }
    }
 
 // Retorna: 1ª entrada de op na tabela de usos.
-Tusos *pesquisa_Tusos(char *op)
+TusosEncapsulado *pesquisa_Tusos(char *op)
    {
-   Tusos *aux;
+   TusosEncapsulado *aux;
    aux = Tab_usos;
    while(aux)
       {
-      if(!strcmp(op, aux->nome))
+      if(!strcmp(op, aux->info.nome))
          return aux;
       else     
          aux = aux->prox;
