@@ -19,6 +19,7 @@ typedef struct Tsimbolos
          9 -> falta a diretiva start;
          10 -> problema na diretiva const;
          11 -> código após a diretiva end;
+         12 -> Linha maior que 80 caracteres;
 */
 typedef struct Terros
    {
@@ -34,26 +35,16 @@ typedef struct Tdefinicoes
    char nome[8];
    int endereco;
    char sinal;
+   struct Tdefinicoes *prox;
    } Tdefinicoes;
-   
-typedef struct TdefinicoesEncapsulado
-   {
-   Tdefinicoes info;
-   struct TdefinicoesEncapsulado *prox;
-   }  TdefinicoesEncapsulado;
 
 typedef struct Tusos
    {
    char nome[8];
    int endereco;
    char reloc;
-   } Tusos;
-   
-typedef struct TusosEncapsulado
-   {
-   Tusos info;
-   struct TusosEncapsulado *prox;
-   }  TusosEncapsulado;   
+   struct Tusos *prox;
+   } Tusos;   
       
 struct Tinstrucoes
    {
@@ -67,10 +58,10 @@ Tsimbolos *Tabela_S;
 Tsimbolos *ultimo_simbolo;
 Terros *Tabela_erros;
 Terros *ultimo_erro;
-TdefinicoesEncapsulado *Tab_def;
-TdefinicoesEncapsulado *ultima_def;
-TusosEncapsulado *Tab_usos;
-TusosEncapsulado *ultima_usos;
+Tdefinicoes *Tab_def;
+Tdefinicoes *ultima_def;
+Tusos *Tab_usos;
+Tusos *ultima_usos;
 
 void inicializa_tabelas();
 void tabela_instrucoes();
@@ -85,9 +76,9 @@ void coloca_Tsimbolos_operando(char *op, int line);
 Tsimbolos *pesquisa_Tsimbolos(char *op1);
 
 void coloca_Tdef(char *op1);
-int coloca_Tdef_end(int lcounter, TdefinicoesEncapsulado *pos_def);
-TdefinicoesEncapsulado *pesquisa_Tdef(char *op1);
+int coloca_Tdef_end(int lcounter, Tdefinicoes *pos_def);
+Tdefinicoes *pesquisa_Tdef(char *op1);
 
-TusosEncapsulado *coloca_Tusos(char *label);
-void coloca_Tusos_end(int lcounter, TusosEncapsulado *pos_uso);
-TusosEncapsulado *pesquisa_Tusos(char *op);
+Tusos *coloca_Tusos(char *label);
+void coloca_Tusos_end(int lcounter, Tusos *pos_uso);
+Tusos *pesquisa_Tusos(char *op);
