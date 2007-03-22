@@ -32,6 +32,6 @@ n 	x STRUCT CODIGO_RELOC	34 bytes	Instruções de máquina + sua informação de relo
 - Observações
 
 As STRUCT SIMBOLO e USO_SIMBOLO acabam quando for encontrado uma com nome e endereço vazio/0.
-A última STRUCT CODIGO_RELOC poderá ter alguns SHORT INT´s que não são efetivamente instruções de máquina, mas estão ali para completar a STRUCT, isso pode ser verificado utilizando o tamanho do código.
+A última STRUCT CODIGO_RELOC poderá ter alguns SHORT INT´s que não são efetivamente instruções de máquina, mas estão ali para completar a STRUCT, isso pode ser verificado utilizando o tamanho do código, o valor deles será -1.
 Se a Informação de relocação é diferente de 0 então o símbolo é relativo, se 0 é absoluto.
 Se o sinal é diferente de 0 então deve somar, se 0 deve substrair.
