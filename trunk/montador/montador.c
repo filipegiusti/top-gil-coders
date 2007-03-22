@@ -29,15 +29,16 @@
 #define ARQUIVO "MASMAPRG.ASM"
 #define SAIDA "OUTPUT"
 #define DEBUG
+#define CRLF "\n"
 
 int main()
    {
+   //TODO: Não escrever o ponteiro no arquivo
    //TODO: Arrumar erro quando comentário na 1ª linha
    //TODO: Arrumar erro quando comentário em outras linhas
    //TODO: suporte a literais
    //TODO: Suporte a endereçamento imediato e indireto
-   //TODO: Escrever info reloc direito
-   //TODO: Tamanho label/operação/operandos maior que o permitido   
+   //TODO: Tamanho label/operação/operandos maior que o permitido
    inicializa_tabelas(); 
    primeira_passagem();   
 #ifdef DEBUG
@@ -71,8 +72,8 @@ int primeira_passagem()
    num_op = 0;
    end = 0;
    Tsimbolos *pos;
-   TdefinicoesEncapsulado *pos_def;
-   TusosEncapsulado *pos_uso;
+   Tdefinicoes *pos_def;
+   Tusos *pos_uso;
    
    if(!(arquivo = fopen(ARQUIVO, "r")))
       {
@@ -170,13 +171,20 @@ int primeira_passagem()
 
 int parser(FILE *arquivo, char *label, char *operacao, char *op1, char *op2)
    {
-   char linha[80];
-   // TODO: Trocar o fgets.
-   if(fgets(linha, 80, arquivo))
+   char linha[81];
+   char bobagem[10];        // Ler caracteres a mais que 80
+   if(fgets(linha, 81, arquivo))
       {
+      if (!strstr(linha, CRLF) && !feof(arquivo))
+            {
+            coloca_Terros(12,0,0,'\0');
+            while (fgets(bobagem, 10, arquivo))
+                if (strstr(linha, CRLF))
+                    break;
+            }
       if(linha[0] == ' ' || linha[0] == '\t')                   //Verifica se começo de linha com espaço em braco ou tabulação
          {
-         sscanf(linha, "%s %s %s", operacao, op1, op2);
+         sscanf(linha, "%6s %8s %8s", operacao, op1, op2);
          if((op1[0] == '#'))
             op1[0] = '\0';
          if((op2[0] == '#'))
@@ -187,14 +195,15 @@ int parser(FILE *arquivo, char *label, char *operacao, char *op1, char *op2)
          }
       else if(linha[0] != '*')
          {
-         sscanf(linha, "%s %s %s %s", label, operacao, op1, op2);
+         sscanf(linha, "%8s %*s %6s %8s %8s", label, operacao, op1, op2);
          if((op1[0] == '#'))
             op1[0] = '\0';
          if((op2[0] == '#'))
             op2[0] = '\0';
 #ifdef DEBUG            
          printf("label: %s | operacao: %s | op1: %s | op2: %s\n", label, operacao, op1, op2);
-#endif        
+#endif   
+        system("pause");
          }
       return 1;
       }
@@ -211,8 +220,8 @@ int segunda_passagem()
    {
    FILE *saida;
    FILE *entrada;
-   TdefinicoesEncapsulado *aux_de;
-   TusosEncapsulado *aux_usos;
+   Tdefinicoes *aux_de, *def_blank;
+   Tusos *aux_usos, *usos_blank;
    short int info_reloc, operacao_num, op1_num, op2_num;
    int i, id_op;
    char label[9];
@@ -226,7 +235,7 @@ int segunda_passagem()
    op1[0] = '\0';
    op2[0] = '\0';
    i = 0;
-      
+   
    if(!(saida = fopen(SAIDA, "wb")))
       return 0;
    if(!(entrada = fopen(ARQUIVO, "r")))
@@ -235,23 +244,21 @@ int segunda_passagem()
    fwrite(&tam_pilha, sizeof(int), 1, saida);    
    fwrite(&start, sizeof(int), 1, saida);
    
-   // Escreve no arquivo a tabela de definições   
    for(aux_de = Tab_def; aux_de; aux_de = aux_de->prox)
-      fwrite(&(aux_de->info), sizeof(Tdefinicoes), 1, saida);
-   aux_de = malloc(sizeof(Tdefinicoes));           // cria separador
-   aux_de->info.nome[0] = '\0';
-   aux_de->info.endereco = 0;
-   aux_de->info.sinal = 0;
-   fwrite(&(aux_de->info), sizeof(Tdefinicoes), 1, saida);  // imprime separador
+      fwrite(aux_de, sizeof(Tdefinicoes), 1, saida);
+   def_blank = malloc(sizeof(Tdefinicoes));           // cria separador
+   def_blank->nome[0] = '\0';
+   def_blank->endereco = 0;
+   def_blank->sinal = 0;
+   fwrite(def_blank, sizeof(Tdefinicoes), 1, saida);  // imprime separador
    
-   // Escreve no arquivo a tabela de usos
    for(aux_usos = Tab_usos; aux_usos; aux_usos = aux_usos->prox)
-      fwrite(&(aux_usos->info), sizeof(Tusos), 1, saida);
-   aux_usos = malloc(sizeof(Tusos));           // cria separador
-   aux_usos->info.nome[0] = '\0';
-   aux_usos->info.endereco = 0;
-   aux_usos->info.reloc = 0;
-   fwrite(&(aux_usos->info), sizeof(Tusos), 1, saida);  // imprime separador
+      fwrite(aux_usos, sizeof(Tab_usos), 1, saida);
+   usos_blank = malloc(sizeof(Tab_usos));           // cria separador
+   usos_blank->nome[0] = '\0';
+   usos_blank->endereco = 0;
+   usos_blank->reloc = 0;
+   fwrite(usos_blank, sizeof(Tab_usos), 1, saida);  // imprime separador
       
    while(parser(entrada, label, operacao, op1, op2))
       {
@@ -318,7 +325,7 @@ int segunda_passagem()
             i = 0;
             }
       }
-   //TODO: Preencher o código com 00 até i ser multiplo de 16 e colocar info info.reloc.
+   //TODO: Preencher o código com 00 até i ser multiplo de 16 e colocar info reloc.
    fclose(entrada);
    fclose(saida);
    }
