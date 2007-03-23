@@ -20,19 +20,30 @@ typedef struct Tsimbolos
          10 -> problema na diretiva const;
          11 -> código após a diretiva end;
          12 -> Linha maior que 80 caracteres;
+         13 -> Label sozinho;
+         14 -> Digito inválido;
+         15 -> Valor fora dos limites.
 */
 typedef struct Terros
    {
    int tipo;
    int linha;
    int lcounter;
-   char texto[10];
+   char texto[15];
    struct Terros *prox;
    } Terros;
 
+typedef struct Tliterais
+   {
+   char nome[9];
+   int linha;
+   int endereco;
+   struct Tliterais *prox;
+   } Tliterais;
+   
 typedef struct Tdefinicoes
    {
-   char nome[8];
+   char nome[9];
    int endereco;
    char sinal;
    } Tdefinicoes;
@@ -45,7 +56,7 @@ typedef struct TdefinicoesEncapsulado
 
 typedef struct Tusos
    {
-   char nome[8];
+   char nome[9];
    int endereco;
    char reloc;
    } Tusos;
@@ -66,6 +77,8 @@ struct Tinstrucoes
 
 Tsimbolos *Tabela_S;
 Tsimbolos *ultimo_simbolo;
+Tliterais *Tab_lit;
+Tliterais *ultima_lit;
 Terros *Tabela_erros;
 Terros *ultimo_erro;
 TdefinicoesEncapsulado *Tab_def;
@@ -88,7 +101,15 @@ Tsimbolos *pesquisa_Tsimbolos(char *op1);
 void coloca_Tdef(char *op1);
 int coloca_Tdef_end(int lcounter, TdefinicoesEncapsulado *pos_def);
 TdefinicoesEncapsulado *pesquisa_Tdef(char *op1);
+void escreve_definicao(const Tdefinicoes *simbolo, FILE *fp);
 
 TusosEncapsulado *coloca_Tusos(char *label);
 void coloca_Tusos_end(int lcounter, TusosEncapsulado *pos_uso);
 TusosEncapsulado *pesquisa_Tusos(char *op);
+void escreve_uso(const Tusos *simbolo, FILE *fp);
+
+Tliterais *pesquisa_Tlit(char *op);
+int busca_end_lit(char *literal);
+int verifica_literal(char *simbolo);
+void coloca_tab_literais(char *op, int linha);
+int httoi(const char *value);

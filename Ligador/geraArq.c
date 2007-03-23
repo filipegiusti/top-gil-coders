@@ -4,7 +4,7 @@
 
 struct tabelaSimbolosGlobal
 {
-   char nome[8];
+   char nome[9];
    int end;
    char infoReloc;
 };
@@ -12,7 +12,7 @@ typedef struct tabelaSimbolosGlobal tabelaSimbolos;
 
 struct tabelaSimbolosUso
 {
-   char nome[8];
+   char nome[9];
    int endSimbolo;
    char sinal;
 };
