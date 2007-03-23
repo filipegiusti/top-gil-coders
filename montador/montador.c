@@ -33,11 +33,11 @@
 
 int main()
    {
-   //TODO: Não escrever o ponteiro no arquivo
    //TODO: Arrumar erro quando comentário na 1ª linha
    //TODO: Arrumar erro quando comentário em outras linhas
    //TODO: suporte a literais
    //TODO: Suporte a endereçamento imediato e indireto
+   //TODO: Escrever info reloc direito
    //TODO: Tamanho label/operação/operandos maior que o permitido
    inicializa_tabelas(); 
    primeira_passagem();   
@@ -72,8 +72,8 @@ int primeira_passagem()
    num_op = 0;
    end = 0;
    Tsimbolos *pos;
-   Tdefinicoes *pos_def;
-   Tusos *pos_uso;
+   TdefinicoesEncapsulado *pos_def;
+   TusosEncapsulado *pos_uso;
    
    if(!(arquivo = fopen(ARQUIVO, "r")))
       {
@@ -220,8 +220,8 @@ int segunda_passagem()
    {
    FILE *saida;
    FILE *entrada;
-   Tdefinicoes *aux_de, *def_blank;
-   Tusos *aux_usos, *usos_blank;
+   TdefinicoesEncapsulado *aux_de;
+   TusosEncapsulado *aux_usos;
    short int info_reloc, operacao_num, op1_num, op2_num;
    int i, id_op;
    char label[9];
@@ -244,21 +244,23 @@ int segunda_passagem()
    fwrite(&tam_pilha, sizeof(int), 1, saida);    
    fwrite(&start, sizeof(int), 1, saida);
    
+   // Escreve no arquivo a tabela de definições   
    for(aux_de = Tab_def; aux_de; aux_de = aux_de->prox)
-      fwrite(aux_de, sizeof(Tdefinicoes), 1, saida);
-   def_blank = malloc(sizeof(Tdefinicoes));           // cria separador
-   def_blank->nome[0] = '\0';
-   def_blank->endereco = 0;
-   def_blank->sinal = 0;
-   fwrite(def_blank, sizeof(Tdefinicoes), 1, saida);  // imprime separador
+      fwrite(&(aux_de->info), sizeof(Tdefinicoes), 1, saida);
+   aux_de = malloc(sizeof(Tdefinicoes));           // cria separador
+   aux_de->info.nome[0] = '\0';
+   aux_de->info.endereco = 0;
+   aux_de->info.sinal = 0;
+   fwrite(&(aux_de->info), sizeof(Tdefinicoes), 1, saida);  // imprime separador
    
+   // Escreve no arquivo a tabela de usos
    for(aux_usos = Tab_usos; aux_usos; aux_usos = aux_usos->prox)
-      fwrite(aux_usos, sizeof(Tab_usos), 1, saida);
-   usos_blank = malloc(sizeof(Tab_usos));           // cria separador
-   usos_blank->nome[0] = '\0';
-   usos_blank->endereco = 0;
-   usos_blank->reloc = 0;
-   fwrite(usos_blank, sizeof(Tab_usos), 1, saida);  // imprime separador
+      fwrite(&(aux_usos->info), sizeof(Tusos), 1, saida);
+   aux_usos = malloc(sizeof(Tusos));           // cria separador
+   aux_usos->info.nome[0] = '\0';
+   aux_usos->info.endereco = 0;
+   aux_usos->info.reloc = 0;
+   fwrite(&(aux_usos->info), sizeof(Tusos), 1, saida);  // imprime separador
       
    while(parser(entrada, label, operacao, op1, op2))
       {
